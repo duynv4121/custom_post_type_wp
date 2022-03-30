@@ -1,0 +1,47 @@
+function tao_custom_post_type()
+{
+    $label = array(
+        'name'=>'Sản phẩm',
+        'singular_name' => 'Sản phẩm'
+    );
+ 
+    $args = array(
+        'labels' => $label,
+        'description' => 'Post type đăng sản phẩm',
+        'supports' => array(
+            'title',
+            'editor',
+            'excerpt',
+            'author',
+            'thumbnail',
+            'comments',
+            'trackbacks',
+            'revisions',
+            'custom-fields'
+        ),// các tính năng được hổ trộ trong post type
+ 
+        'taxonomies' => array('category', 'post_tag'),
+        'hierarchical'=> false,
+        'public' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => true,
+        'show_in_admin_bar' => true,
+        'menu_position'=> 5,
+        'menu_icon' => '',
+        'can_export' => true,
+        'has_archive' => true,
+        'exclude_from_search' => false, //Loại bỏ khỏi kết quả tìm kiếm
+        'publicly_queryable' => true, //Hiển thị các tham số trong query, phải đặt true
+        'capability_type' => 'post' ,
+    );
+    register_post_type('sanpham', $args);
+}
+ 
+add_action('init', 'tao_custom_post_type');
+ 
+add_filter('pre_get_posts','lay_custom_post_type');
+function lay_custom_post_type($query) {
+  if (is_home() && $query->is_main_query ())
+    $query->set ('post_type', array ('post','sanpham'));
+    return $query;
+}
